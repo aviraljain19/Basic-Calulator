@@ -28,8 +28,12 @@ on.addEventListener("click", () => {
 box.forEach((e, i) => {
   box[i].addEventListener("click", () => {
     if (onOff == true) {
-      dispNo.append(char[i].innerHTML);
       arr.push(char[i].innerHTML);
+      if (arr[0] != "+" && arr[0] != "*" && arr[0] != "/") {
+        dispNo.append(char[i].innerHTML);
+      } else {
+        arr = [];
+      }
     }
   });
 });
@@ -41,53 +45,112 @@ equals.addEventListener("click", () => {
   count = 0;
   let count1 = [];
   let res = [];
-  console.log(arr);
   let str = arr.join("");
   for (let x = 0; x < arr.length; x++) {
-    console.log(str);
     if (
       (str.charCodeAt(x) >= 48 && str.charCodeAt(x) <= 57) ||
       str.charCodeAt(x) == 46
     ) {
       count++;
-      console.log(count);
     } else {
       count1.push(x);
     }
   }
 
-  let ini = 0;
-  let g1;
-  for (let g = 0; g < count1.length; g++) {
-    res[g] = parseFloat(str.slice(ini, count1[g]));
-    ini = count1[g] + 1;
-    g1 = g;
-  }
-  res[g1 + 1] = parseFloat(str.slice(count1[g1] + 1, str.length));
-  console.log(count1);
-  console.log(res);
+  if (arr[0] == "-") {
+    let ini = 1;
+    let g1;
+    let g2 = 0;
+    for (let g = 1; g < count1.length; g++) {
+      res[g2] = parseFloat(str.slice(ini, count1[g]));
+      console.log(res[g2]);
+      g2++;
+      ini = count1[g] + 1;
+      //g1 = g;
+    }
+    res[g2] = parseFloat(str.slice(count1[g2] + 1, str.length));
+    console.log(res[0]);
+    console.log(res[1]);
+    console.log(res[2]);
+    g2 = 0;
+    if (str.charCodeAt(count1[1]) == 43) {
+      result = -res[0] + res[1];
+      arr = [];
+      arr.push(result);
+      console.log(result);
+    } else if (str.charCodeAt(count1[1]) == 45) {
+      result = -res[0] - res[1];
+      arr = [];
+      arr.push(result);
+      console.log(result);
+    } else if (str.charCodeAt(count1[1]) == 47) {
+      result = -res[0] / res[1];
+      arr = [];
+      arr.push(result);
+      console.log(result);
+    } else if (str.charCodeAt(count1[1]) == 42) {
+      result = -res[0] * res[1];
+      arr = [];
+      arr.push(result);
+      console.log(result);
+    }
+    for (let q = 2; q < count1.length; q++) {
+      if (str.charCodeAt(count1[q]) == 43) {
+        result = result + res[q];
+        arr = [];
+        arr.push(result);
+        console.log(result);
+      } else if (str.charCodeAt(count1[q]) == 45) {
+        result = result - res[q];
+        arr = [];
+        arr.push(result);
+        console.log(result);
+      } else if (str.charCodeAt(count1[q]) == 47) {
+        result = result / res[q];
+        arr = [];
+        arr.push(result);
+        console.log(result);
+      } else if (str.charCodeAt(count1[q]) == 42) {
+        result = result * res[q];
+        arr = [];
+        arr.push(result);
+        console.log(result);
+      }
+    }
+  
+    dispNo.innerHTML = result;
+  } else {
+    let ini = 0;
+    let g1;
+    for (let g = 0; g < count1.length; g++) {
+      res[g] = parseFloat(str.slice(ini, count1[g]));
+      ini = count1[g] + 1;
+      g1 = g;
+    }
+    res[g1 + 1] = parseFloat(str.slice(count1[g1] + 1, str.length));
 
-  if (str.charCodeAt(count1[0]) == 43) {
-    result = res[0] + res[1];
-    arr = [];
-    arr.push(result);
-    console.log(result);
-  } else if (str.charCodeAt(count1[0]) == 45) {
-    result = res[0] - res[1];
-    arr = [];
-    arr.push(result);
-    console.log(result);
-  } else if (str.charCodeAt(count1[0]) == 47) {
-    result = res[0] / res[1];
-    arr = [];
-    arr.push(result);
-    console.log(result);
-  } else if (str.charCodeAt(count1[0]) == 42) {
-    result = res[0] * res[1];
-    arr = [];
-    arr.push(result);
-    console.log(result);
-  }
+    if (str.charCodeAt(count1[0]) == 43) {
+      result = res[0] + res[1];
+      arr = [];
+      arr.push(result);
+      console.log(result);
+    } else if (str.charCodeAt(count1[0]) == 45) {
+      result = res[0] - res[1];
+      arr = [];
+      arr.push(result);
+      console.log(result);
+    } else if (str.charCodeAt(count1[0]) == 47) {
+      result = res[0] / res[1];
+      arr = [];
+      arr.push(result);
+      console.log(result);
+    } else if (str.charCodeAt(count1[0]) == 42) {
+      result = res[0] * res[1];
+      arr = [];
+      arr.push(result);
+      console.log(result);
+    }
+  
   for (let q = 1; q < count1.length; q++) {
     if (str.charCodeAt(count1[q]) == 43) {
       result = result + res[q + 1];
@@ -113,8 +176,7 @@ equals.addEventListener("click", () => {
   }
 
   dispNo.innerHTML = result;
-  //let res1 = parseFloat(str.slice(0, count));
-  //let res2 = parseFloat(str.slice(count + 1, str.length));
+}
 });
 
 back.addEventListener("click", () => {
